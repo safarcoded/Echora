@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#04060c">
+<meta name="color-scheme" content="dark">
+<title>ECHORA · Earrings — Cinematic Lyrics</title>
+<style>
+@property --h1{syntax:'<number>';inherits:true;initial-value:215}
+@property --h2{syntax:'<number>';inherits:true;initial-value:255}
+:root{--ice:#bcd4f2;--ch:#ecdcbc;--tx:#eef3fb;
+--serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua","Noto Serif",Georgia,serif;
+--hi:"Noto Serif Devanagari","Kohinoor Devanagari","Devanagari Sangam MN","Nirmala UI",Mangal,"Noto Sans Devanagari",serif;
+transition:--h1 3s ease,--h2 3s ease}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:#04060c;color:var(--tx);touch-action:auto;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+#bg{position:fixed;inset:0;background:radial-gradient(120% 90% at 50% 40%,#0a1226,#060914 55%,#030409)}
+.light{position:fixed;inset:-25%;pointer-events:none;animation:drift 24s ease-in-out infinite alternate}
+.la{background:radial-gradient(42% 34% at 24% 26%,hsl(var(--h1) 55% 48%/.30),transparent 70%)}
+.lb{background:radial-gradient(44% 36% at 78% 62%,hsl(var(--h2) 45% 50%/.24),transparent 70%);animation-duration:31s}
+@keyframes drift{to{transform:translate3d(5%,-4%,0) scale(1.1)}}
+#stars{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+#world{position:fixed;inset:0;perspective:800px;perspective-origin:50% 50%;overflow:hidden;transition:opacity 1.3s ease}
+#rail{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d;will-change:transform}
+.orb{position:absolute;left:0;top:0;border-radius:50%;pointer-events:none}
+.ln{position:absolute;left:0;top:0;width:min(86vw,560px);transform-origin:0 0;transform-style:preserve-3d;text-align:center;font:500 clamp(27px,7.4vw,40px)/1.34 var(--serif);letter-spacing:.01em;text-wrap:balance;visibility:hidden}
+.tx{opacity:var(--o,0);filter:blur(calc(var(--b,0)*1px));text-shadow:0 2px 28px rgba(0,0,0,.75)}
+.g{position:absolute;left:0;top:0;width:100%;color:var(--ice);pointer-events:none}
+.g1{transform:translateZ(-80px);opacity:calc(var(--o,0)*.22);filter:blur(calc(1.5px + var(--b,0)*1px))}
+.g2{transform:translateZ(-170px);opacity:calc(var(--o,0)*.1);filter:blur(calc(3px + var(--b,0)*1px))}
+.w{transition:opacity .7s ease}
+.ln.act .w{opacity:.26}.ln.act .w.on{opacity:1}
+.en{font-style:italic;color:var(--tx)}
+.hi{font-family:var(--hi);color:var(--ch)}
+.vig{position:fixed;inset:0;z-index:30;pointer-events:none;background:radial-gradient(ellipse at 50% 45%,transparent 48%,rgba(0,0,0,.62))}
+.grain{position:fixed;inset:-20%;z-index:31;pointer-events:none;opacity:.09;mix-blend-mode:overlay;animation:gr .9s steps(1) infinite}
+@keyframes gr{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-4%)}75%{transform:translate(-4%,-1%)}}
+#veil{position:fixed;inset:0;z-index:80;background:#000;pointer-events:none;transition:opacity 2s ease}
+.on #veil{opacity:0}
+#back{position:fixed;z-index:90;top:calc(env(safe-area-inset-top,0px) + 10px);left:max(14px,env(safe-area-inset-left));width:48px;height:48px;display:grid;place-items:center;border:0;border-radius:50%;cursor:pointer;color:var(--ice);background:rgba(8,12,24,.5);box-shadow:inset 0 0 0 1px rgba(188,212,242,.2);transition:transform .25s,background .3s}
+#back:active{transform:scale(.92)}#back:focus-visible{outline:1px solid var(--ice);outline-offset:3px}
+#back svg{width:22px;height:22px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.rm .orb,.rm .g{display:none}
+.rm .tx{transition:opacity .9s ease}
+@media (prefers-reduced-motion:reduce){.light,.grain{animation:none!important}#veil{transition-duration:.5s}}
+
+/* ECHORA synced player controls */
+#audio{display:none}
+#world{touch-action:none}
+#playerDock{position:fixed;z-index:65;left:0;right:0;bottom:0;padding:0 20px calc(env(safe-area-inset-bottom,0px) + 14px);display:flex;flex-direction:column;align-items:center;pointer-events:none}
+#playerDock::before{content:"";position:absolute;left:0;right:0;bottom:0;height:calc(100% + 60px);background:linear-gradient(to top,rgba(3,5,10,.92),rgba(3,5,10,.6) 55%,transparent);z-index:-1;pointer-events:none}
+#playerDock>*{pointer-events:auto;width:min(520px,100%)}
+.trackTop{text-align:center;margin-bottom:4px}
+.trackTop strong{display:block;font:italic 400 22px/1.2 var(--serif);letter-spacing:.01em;color:var(--tx)}
+.trackTop small{display:block;margin-top:3px;font:400 12px system-ui,sans-serif;letter-spacing:.1em;color:rgba(188,212,242,.6)}
+.scrubArea{position:relative;height:48px}
+#seekWave{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#seek{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer;touch-action:none;-webkit-appearance:none;appearance:none}
+.fr{position:absolute;inset:2px -4px;border-radius:12px;box-shadow:0 0 0 1px rgba(188,212,242,.55);opacity:0;pointer-events:none;transition:opacity .2s}
+#seek:focus-visible~.fr{opacity:1}
+.timeRow{display:flex;justify-content:space-between;align-items:center;font:400 12px/1 system-ui,sans-serif;font-variant-numeric:tabular-nums;color:rgba(188,212,242,.6)}
+#lineCount{font-size:11px;letter-spacing:.14em;color:rgba(236,220,188,.7)}
+#elapsed{transition:color .3s}
+#playerDock.seeking #elapsed{color:var(--ch)}
+.ctrlRow{display:flex;justify-content:center;align-items:center;gap:32px;margin-top:16px}
+.lineBtn{width:48px;height:48px;border:0;border-radius:50%;display:grid;place-items:center;background:none;color:rgba(188,212,242,.7);cursor:pointer;transition:color .3s,transform .3s cubic-bezier(.22,1,.36,1)}
+.lineBtn:hover{color:#fff}.lineBtn:active{transform:scale(.86)}
+.lineBtn:focus-visible{outline:1px solid var(--ice);outline-offset:2px}
+.lineBtn svg{width:22px;height:22px}
+.playControl{position:relative;width:68px;height:68px;border:0;border-radius:50%;display:grid;place-items:center;background:var(--ch);color:#0a0f1c;cursor:pointer;transition:transform .35s cubic-bezier(.22,1,.36,1)}
+.playControl:active{transform:scale(.92)}
+.playControl:focus-visible{outline:2px solid var(--ice);outline-offset:9px}
+.playControl .pico{position:absolute;left:0;top:0;width:68px;height:68px}
+.playControl .ring{position:absolute;left:-7px;top:-7px;width:82px;height:82px;transform:rotate(-90deg);pointer-events:none}
+.ring circle{fill:none;stroke-width:2;stroke-linecap:round}
+.ring .rt{stroke:rgba(188,212,242,.16)}
+.ring .rp{stroke:var(--ch);stroke-dasharray:100;stroke-dashoffset:100}
+.pi{fill:currentColor;transform-box:fill-box;transform-origin:center;transition:opacity .3s,transform .5s cubic-bezier(.22,1,.36,1)}
+.pi.pa{opacity:0;transform:scale(.55) rotate(-40deg)}
+.playControl.playing .pi.pl{opacity:0;transform:scale(.55) rotate(40deg)}
+.playControl.playing .pi.pa{opacity:1;transform:none}
+.playControl::after{content:"";position:absolute;left:-7px;top:-7px;width:82px;height:82px;border-radius:50%;border:1px solid rgba(188,212,242,.38);opacity:0;pointer-events:none}
+.playControl.playing::after{animation:echo 2.8s ease-out infinite}
+@keyframes echo{0%{transform:scale(1);opacity:.45}100%{transform:scale(1.6);opacity:0}}
+@media(prefers-reduced-motion:reduce){.playControl.playing::after{animation:none}.pi{transition:none}}
+#gestureHint{position:fixed;z-index:60;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 214px);transform:translateX(-50%);font:9px/1.4 system-ui,sans-serif;letter-spacing:.17em;color:rgba(188,212,242,.44);text-align:center;white-space:nowrap;pointer-events:none}#gestureHint span{color:rgba(236,220,188,.65);padding:0 6px}#audioMessage{position:fixed;z-index:91;top:calc(env(safe-area-inset-top,0px) + 17px);left:50%;transform:translateX(-50%);max-width:calc(100vw - 100px);padding:8px 12px;border:1px solid rgba(188,212,242,.17);border-radius:999px;background:rgba(7,11,21,.88);color:rgba(188,212,242,.8);font:11px/1.4 system-ui,sans-serif;opacity:0;pointer-events:none;transition:opacity .25s;text-align:center}#audioMessage.show{opacity:1}#audioMessage.error{color:#f0d1c9;border-color:rgba(240,160,150,.3)}#back{touch-action:manipulation}
+@media(max-width:620px){#gestureHint{font-size:8px;letter-spacing:.12em}#audioMessage{top:calc(env(safe-area-inset-top,0px) + 12px)}}
+@media(max-width:380px){.trackTop strong{font-size:20px}.ctrlRow{gap:24px}}
+@media(prefers-reduced-motion:reduce){#playerDock,#audioMessage{backdrop-filter:none;-webkit-backdrop-filter:none}}
+
+</style>
+</head>
+<body>
+<div id="bg"></div><div class="light la"></div><div class="light lb"></div>
+<canvas id="stars" aria-hidden="true"></canvas>
+<div id="world"><div id="rail"></div></div>
+<div class="sr" id="sr"></div>
+<div class="vig"></div><div class="grain"></div><div id="veil"></div>
+<button id="back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+<audio id="audio" preload="metadata"></audio>
+<div id="playerDock" aria-label="Earrings audio player">
+  <div class="trackTop"><strong id="trackTitle">Earrings</strong><small id="trackArtist">Malcolm Todd</small></div>
+  <div class="scrubArea"><canvas id="seekWave" aria-hidden="true"></canvas><input id="seek" type="range" min="0" max="1000" value="0" aria-label="Seek through song"><i class="fr"></i></div>
+  <div class="timeRow"><span id="elapsed">0:00</span><span id="lineCount">01 / 39</span><span id="duration">—:—</span></div>
+  <div class="ctrlRow">
+    <button id="prevLyric" class="lineBtn" type="button" aria-label="Previous lyric" title="Previous lyric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 6l-7 6 7 6M6 6v12"/></svg></button>
+    <button id="play" class="playControl" type="button" aria-label="Play song" aria-pressed="false">
+      <svg class="ring" viewBox="0 0 82 82" aria-hidden="true"><circle class="rt" cx="41" cy="41" r="39.5"/><circle id="ringP" class="rp" cx="41" cy="41" r="39.5" pathLength="100"/></svg>
+      <svg class="pico" viewBox="0 0 68 68" aria-hidden="true"><path class="pi pl" d="M28 23.5v21l18-10.5z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><g class="pi pa"><rect x="24.5" y="23" width="7" height="22" rx="2.2"/><rect x="36.5" y="23" width="7" height="22" rx="2.2"/></g></svg>
+    </button>
+    <button id="nextLyric" class="lineBtn" type="button" aria-label="Next lyric" title="Next lyric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 6l7 6-7 6M18 6v12"/></svg></button>
+  </div>
+</div>
+<div id="gestureHint">SWIPE TO MOVE THROUGH LYRICS <span>·</span> TAP TO PAUSE / PLAY</div>
+<div id="audioMessage" role="status" aria-live="polite">Loading Earrings…</div>
+
+<script>
+(()=>{
+const CONFIG={backUrl:'homepage.html'};
+const TRACK=[{"time":0.1161,"text":"Her love is in your head","order":1},{"time":3.827476,"text":"You lost your earrings in her bed","order":2},{"time":6.442744,"text":"You couldn't tell her that you lost them","order":3},{"time":9.786365,"text":"'Cause you're scared and you're not talking","order":4},{"time":12.879474,"text":"So you think of what to say","order":5},{"time":15.804254,"text":"Then save it for another day","order":6},{"time":18.573669,"text":"'Cause you just never had the heart","order":7},{"time":21.803716,"text":"Now they just drift further apart","order":8},{"time":25.424715,"text":"From you","order":9},{"time":31.003687,"text":"From you","order":10},{"time":36.872279,"text":"From you","order":11},{"time":42.786178,"text":"From you","order":12},{"time":73.13352,"text":"Her love is in your head","order":13},{"time":75.490829,"text":"You lost your earrings in her bed","order":14},{"time":78.510166,"text":"You couldn't tell her that you lost them","order":15},{"time":81.848451,"text":"'Cause you're scared and you're not talking","order":16},{"time":84.919633,"text":"So you think of what to say","order":17},{"time":87.545689,"text":"Then save it for another day","order":18},{"time":90.667435,"text":"'Cause you just never had the heart","order":19},{"time":93.839912,"text":"Now they just drift further apart","order":20},{"time":96.881486,"text":"From you","order":21},{"time":97.891338,"text":"Extra, extra read all about it","order":22},{"time":100.533123,"text":"Malcolm's in his feelings and he can't get out of it (from you)","order":23},{"time":103.33749,"text":"Extra, extra read all about it","order":24},{"time":106.602586,"text":"Malcolm's in his feelings and he can't get out of it (from you)","order":25},{"time":109.001237,"text":"Extra, extra read all about it","order":26},{"time":112.664218,"text":"Malcolm's in his feelings and he can't get out of it (from you)","order":27},{"time":115.519275,"text":"Extra, extra read all about it","order":28},{"time":118.616421,"text":"Malcolm's in his feelings and he can't get out of it","order":29},{"time":121.569698,"text":"From you","order":30},{"time":126.88784,"text":"From you","order":31},{"time":132.890008,"text":"From you","order":32},{"time":133.813318,"text":"Extra, extra read all about it","order":33},{"time":136.620737,"text":"Malcolm's in his feelings and he can't get out of it (from you)","order":34},{"time":139.562322,"text":"Extra, extra read all about it","order":35},{"time":142.556164,"text":"Malcolm's in his feelings and he can't get out of it","order":36},{"time":144.137278,"text":"Can't get out of it","order":37},{"time":145.513859,"text":"Can't get out of it","order":38},{"time":149.902,"text":"I hope you like my mixtape","order":39}]; // Timestamped lyrics from the ECHORA sync editor.
+const L=TRACK.map(item=>item.text);
+const TIMES=TRACK.map(item=>Number(item.time));
+const N=L.length;
+
+/* ====== END OF TIMESTAMPED LYRICS ====== */
+
+const $=s=>document.querySelector(s),root=document.documentElement;
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(RM)document.body.classList.add('rm');
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const SP=480,HOLD=.58;
+const PAL=[[215,255],[255,215],[230,38],[200,260]];
+const audioElement=$('#audio');
+const EMBEDDED=new URLSearchParams(location.search).get('embedded')==='1'&&window.parent!==window;
+let bridgeState={trackId:'t1',title:'Earrings',artist:'Malcolm Todd',album:'Earrings',time:0,duration:152,playing:false,sim:false,ended:false};
+let audio=audioElement;
+if(EMBEDDED){
+  audioElement.removeAttribute('src');
+  audio=new EventTarget();
+  Object.defineProperties(audio,{
+    currentTime:{get:()=>bridgeState.time,set:v=>window.parent.postMessage({type:'ECHORA_SEEK',time:Number(v)},'*')},
+    duration:{get:()=>bridgeState.duration},
+    paused:{get:()=>!bridgeState.playing},
+    ended:{get:()=>!!bridgeState.ended}
+  });
+  audio.play=()=>{window.parent.postMessage({type:'ECHORA_PLAY'},'*');return Promise.resolve()};
+  audio.pause=()=>window.parent.postMessage({type:'ECHORA_PAUSE'},'*');
+}else{audioElement.src='Earrings.mp3'}
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+if(EMBEDDED){
+  let hasMetadata=false,wasPlaying=false;
+  window.addEventListener('message',e=>{
+    if(e.source!==window.parent||!e.data||e.data.type!=='ECHORA_SYNC'||!e.data.state)return;
+    const s=e.data.state,oldTime=bridgeState.time;
+    wasPlaying=bridgeState.playing;
+    bridgeState={...bridgeState,...s};
+    $('#trackTitle').textContent=bridgeState.title||'Unknown track';
+    $('#trackArtist').textContent=bridgeState.artist||'';
+    if(!hasMetadata){hasMetadata=true;audio.dispatchEvent(new Event('loadedmetadata'))}
+    if(wasPlaying!==bridgeState.playing)audio.dispatchEvent(new Event(bridgeState.playing?'play':'pause'));
+    if(Math.abs(oldTime-bridgeState.time)>.03)audio.dispatchEvent(new Event('timeupdate'));
+    audio.dispatchEvent(new Event('timeupdate'));
+  });
+  // Ask the homepage for its live player state immediately after this iframe starts.
+  window.parent.postMessage({type:'ECHORA_READY'},'*');
+}
+$('#sr').innerHTML=L.map(l=>'<p>'+esc(l)+'</p>').join('');
+$('#lineCount').textContent='01 / '+String(N).padStart(2,'0');
+function progressAtTime(t){
+  if(!N)return 0;
+  if(t<=TIMES[0])return 0;
+  let lo=0,hi=N-1;
+  while(lo<hi){const mid=Math.ceil((lo+hi)/2);if(TIMES[mid]<=t)lo=mid;else hi=mid-1;}
+  if(lo>=N-1){
+    const duration=Number.isFinite(audio.duration)?audio.duration:TIMES[N-1]+1.8;
+    const tail=Math.max(.05,duration-TIMES[N-1]);
+    // Keep the last line centered while its words illuminate through the song's final tail.
+    return N-1+HOLD*clamp((t-TIMES[N-1])/tail,0,1);
+  }
+  const span=Math.max(.05,TIMES[lo+1]-TIMES[lo]);
+  return lo+clamp((t-TIMES[lo])/span,0,1);
+}
+function lineAtTime(t){
+  let lo=0,hi=N-1;
+  while(lo<hi){const mid=Math.ceil((lo+hi)/2);if(TIMES[mid]<=t)lo=mid;else hi=mid-1;}
+  return lo;
+}
+
+/* grain */
+const g=document.createElement('canvas');g.width=g.height=160;const gx=g.getContext('2d'),gi=gx.createImageData(160,160);
+for(let i=0;i<gi.data.length;i+=4){gi.data[i]=gi.data[i+1]=gi.data[i+2]=Math.random()*255;gi.data[i+3]=255}
+gx.putImageData(gi,0,0);$('.grain').style.backgroundImage='url('+g.toDataURL()+')';
+
+/* Audio time is the source of truth; visual easing only shapes transitions. */
+const ease=x=>x*x*(3-2*x);
+const mapF=u=>{if(u>=N)return N;const i=Math.max(0,Math.min(N-1,Math.floor(u))),p=u-i;return i+(p<HOLD?0:ease(clamp((p-HOLD)/(1-HOLD),0,1)))};
+
+/* build the world */
+const rail=$('#rail'),world=$('#world');
+const els=L.map((t,i)=>{const e=document.createElement('div');e.className='ln';e.dataset.index=String(i);
+const ws=t.split(/\s+/).map(w=>/[\u0900-\u097F]/.test(w)?'<span class="w hi" lang="hi">'+esc(w)+'</span>':'<span class="w en">'+esc(w)+'</span>').join(' ');
+e.innerHTML='<div class="g g1" aria-hidden="true">'+esc(t)+'</div><div class="g g2" aria-hidden="true">'+esc(t)+'</div><div class="tx" aria-hidden="true">'+ws+'</div>';
+e._w=[...e.querySelectorAll('.w')];e._lit=-1;e._act=false;e._vis=0;rail.appendChild(e);return e});
+let sd=11;const rr=()=>(sd=sd*16807%2147483647)/2147483647;
+for(let k=0;k<12;k++){const o=document.createElement('div'),z=-rr()*N*SP,sz=200+rr()*320,h=[215,255,38][k%3];
+o.className='orb';o.style.cssText='width:'+sz+'px;height:'+sz+'px;background:radial-gradient(circle,hsla('+h+',60%,70%,'+(.13+rr()*.1).toFixed(2)+'),transparent 66%);transform:translate3d('+((rr()-.5)*1100)+'px,'+((rr()-.5)*800)+'px,'+z+'px) translate(-50%,-50%)';rail.appendChild(o)}
+
+let W=0,Hh=0,Wx=0,Hy=0;const X=f=>Math.sin(f*.9)*Wx,Y=f=>Math.cos(f*1.3)*Hy;
+const cv=$('#stars'),cx=cv.getContext('2d');
+function layout(){W=innerWidth;Hh=innerHeight;Wx=Math.min(W*.17,100);Hy=Hh*.05;
+els.forEach((e,i)=>e.style.transform=RM?'translate(-50%,-50%)':'translate3d('+X(i)+'px,'+Y(i)+'px,'+(-i*SP)+'px) rotateY('+(-Math.sin(i*.9)*10)+'deg) rotateZ('+(Math.sin(i*1.7)*1.4)+'deg) translate(-50%,-50%)');
+const D=Math.min(devicePixelRatio||1,1.75);cv.width=W*D;cv.height=Hh*D;cx.setTransform(D,0,0,D,0,0);if(RM)drawStars(0,0,0,0)}
+
+/* stars fly toward you faster as the camera moves */
+const COL=['188,212,242','154,140,200','217,194,154'];
+const ST=Array.from({length:150},()=>({x:(Math.random()-.5)*2.4,y:(Math.random()-.5)*2.4,z:Math.random(),c:COL[Math.random()<.18?2:Math.random()<.4?1:0]}));
+function drawStars(dt,vel,camX,camY){cx.clearRect(0,0,W,Hh);const F=Math.max(W,Hh)*.35;cx.lineCap='round';
+for(const s of ST){const dz=RM?0:dt*(2.5e-5+vel*.22);const z0=s.z;s.z-=dz;
+if(s.z<=.03){s.z=1;s.x=(Math.random()-.5)*2.4;s.y=(Math.random()-.5)*2.4;continue}
+const x1=W/2+s.x*F/s.z-camX*.05/s.z,y1=Hh/2+s.y*F/s.z-camY*.05/s.z,x0=W/2+s.x*F/z0-camX*.05/z0,y0=Hh/2+s.y*F/z0-camY*.05/z0;
+cx.strokeStyle='rgba('+s.c+','+((1-s.z)*.9).toFixed(2)+')';cx.lineWidth=(1-s.z)*1.7+.3;cx.beginPath();cx.moveTo(x0,y0);cx.lineTo(x1,y1);cx.stroke()}}
+
+/* Player + lyric navigation. Every seek resolves back to the audio timestamp map. */
+let fs=0,pf=0,lt=0,px=0,py=0,tx=0,ty=0,ca=-1,drag=false,dragStartY=0,lastY=0,moved=0,swipeRemainder=0,seekSnap=false,messageTimer=null;
+const st=$('#world'),playBtn=$('#play');
+function showMessage(message,error=false){const box=$('#audioMessage');box.textContent=message;box.classList.toggle('error',error);box.classList.add('show');clearTimeout(messageTimer);messageTimer=setTimeout(()=>box.classList.remove('show'),error?5000:2600)}
+function formatTime(seconds){if(!Number.isFinite(seconds)||seconds<0)return '0:00';const m=Math.floor(seconds/60),s=Math.floor(seconds%60);return m+':'+String(s).padStart(2,'0')}
+function updatePlayButton(){const playing=!audio.paused&&!audio.ended;playBtn.setAttribute('aria-pressed',String(playing));playBtn.setAttribute('aria-label',playing?'Pause song':'Play song');playBtn.classList.toggle('playing',playing)}
+async function togglePlayback(){if(audio.paused||audio.ended){if(audio.ended){audio.currentTime=0;fs=0;pf=0}try{await audio.play()}catch(err){showMessage('Could not start audio. Check that assets/audio/Earrings.mp3 is beside this page.',true)}}else audio.pause();updatePlayButton()}
+function seekToLine(index){if(!N)return;const i=clamp(index,0,N-1);const target=TIMES[i];try{audio.currentTime=target;seekSnap=true;fs=mapF(i);pf=fs;ca=-1;$('#lineCount').textContent=String(i+1).padStart(2,'0')+' / '+String(N).padStart(2,'0');updatePlayButton()}catch(err){showMessage('The audio is not ready to seek yet.',true)}}
+function stepLine(delta){const i=lineAtTime(audio.currentTime||0);seekToLine(i+delta)}
+function back(){if(EMBEDDED){window.parent.postMessage({type:'ECHORA_CLOSE'},'*');return}audio.pause();if(history.length>1)history.back();else location.href=CONFIG.backUrl}
+$('#back').onclick=back;
+playBtn.addEventListener('click',togglePlayback);
+$('#prevLyric').addEventListener('click',()=>stepLine(-1));$('#nextLyric').addEventListener('click',()=>stepLine(1));
+$('#seek').addEventListener('input',()=>{if(Number.isFinite(audio.duration)&&audio.duration>0){audio.currentTime=(Number($('#seek').value)/1000)*audio.duration;seekSnap=true}});
+audio.addEventListener('loadedmetadata',()=>{const duration=audio.duration;$('#duration').textContent=formatTime(duration);$('#seek').value='0';showMessage('Earrings is ready. Press play when you are.',false);updatePlayButton()});
+audio.addEventListener('timeupdate',()=>{const duration=audio.duration||0;$('#elapsed').textContent=formatTime(audio.currentTime);if(duration>0)$('#seek').value=String(Math.round(audio.currentTime/duration*1000));$('#lineCount').textContent=String(lineAtTime(audio.currentTime)+1).padStart(2,'0')+' / '+String(N).padStart(2,'0')});
+['play','pause','ended','seeking','seeked'].forEach(ev=>audio.addEventListener(ev,()=>{updatePlayButton();if(ev==='seeking'){seekSnap=true}else if(ev==='seeked'){seekSnap=true}}));
+audio.addEventListener('error',()=>showMessage('Audio file not found. Keep this page beside assets/audio/Earrings.mp3.',true));
+function isControlTarget(target){return !!(target.closest('#playerDock')||target.closest('#back')||target.closest('button')||target.closest('input'))}
+addEventListener('pointerdown',e=>{if(isControlTarget(e.target))return;drag=true;dragStartY=lastY=e.clientY;moved=0;swipeRemainder=0});
+addEventListener('pointermove',e=>{px=(e.clientX/W-.5)*2;py=(e.clientY/Hh-.5)*2;if(!drag)return;const dy=e.clientY-lastY;lastY=e.clientY;moved+=Math.abs(dy);swipeRemainder+=-dy;while(swipeRemainder>=58){stepLine(1);swipeRemainder-=58}while(swipeRemainder<=-58){stepLine(-1);swipeRemainder+=58}});
+function pointerEnd(e){if(!drag)return;if(moved<8){const line=e.target.closest('.ln');if(line)seekToLine(Number(line.dataset.index));else togglePlayback()}drag=false}
+addEventListener('pointerup',pointerEnd);addEventListener('pointercancel',()=>{drag=false});
+let wheelRemainder=0;addEventListener('wheel',e=>{if(isControlTarget(e.target))return;e.preventDefault();wheelRemainder+=e.deltaY;while(wheelRemainder>=72){stepLine(1);wheelRemainder-=72}while(wheelRemainder<=-72){stepLine(-1);wheelRemainder+=72}},{passive:false});
+addEventListener('keydown',e=>{if(e.target.closest('input,textarea,button,select')){if(e.code==='Escape')back();return}if(e.code==='Space'){e.preventDefault();togglePlayback()}else if(e.code==='ArrowDown'||e.code==='ArrowRight'){e.preventDefault();stepLine(1)}else if(e.code==='ArrowUp'||e.code==='ArrowLeft'){e.preventDefault();stepLine(-1)}else if(e.code==='Escape')back()});
+function loop(now){
+const dt=Math.min(50,now-lt||16);lt=now;
+const rawU=progressAtTime(audio.currentTime||0),target=mapF(rawU);
+if(seekSnap){fs=target;pf=fs;seekSnap=false}else fs+=(target-fs)*Math.min(1,dt/(drag?90:150));
+const vel=Math.abs(fs-pf)/Math.max(1,dt);pf=fs;
+if(!RM){tx+=(px-tx)*.06;ty+=(py-ty)*.06;const sw=audio.paused?0:Math.sin(now*.00035)*1.2;
+rail.style.transform='rotateX('+(-ty*3+sw*.6)+'deg) rotateY('+(Math.sin(fs*.9)*10+tx*4+sw)+'deg) translate3d('+(-X(fs))+'px,'+(-Y(fs))+'px,'+(fs*SP)+'px)'}
+for(let i=0;i<N;i++){const e=els[i],d=i-fs;let o,b,vis=1;
+if(RM){o=Math.abs(d)<.5?1:0;b=0;vis=Math.abs(d)<1.2}
+else if(d>=0){o=Math.pow(Math.max(0,1-d/2.6),1.3);b=Math.min(7,d*2.4);vis=d<2.7}
+else{o=Math.max(0,1+d*2.8);b=-d*16;vis=d>-.4}
+if(!vis){if(e._vis){e.style.visibility='hidden';e._vis=0}continue}
+if(!e._vis){e.style.visibility='visible';e._vis=1}
+e.style.setProperty('--o',o.toFixed(3));e.style.setProperty('--b',(Math.round(b*2)/2).toString());
+const act=Math.abs(d)<.5;
+if(act!==e._act){e._act=act;e.classList.toggle('act',act);e._lit=-1}
+if(act){const n=e._w.length,p=clamp(rawU-i,0,HOLD);const lit=Math.min(n,Math.floor((p/HOLD)*(n+.6)));
+if(lit!==e._lit){e._lit=lit;e._w.forEach((w,k)=>w.classList.toggle('on',k<lit))}}}
+const a=Math.min(N-1,Math.max(0,Math.round(fs)));
+if(a!==ca){ca=a;const p=PAL[a%PAL.length];root.style.setProperty('--h1',p[0]);root.style.setProperty('--h2',p[1])}
+if(!RM)drawStars(audio.paused?0:dt,vel,X(fs),Y(fs));drawSeek(now,dt);
+requestAnimationFrame(loop)}
+
+/* seek line: the line that sings where you are, and echoes */
+const skC=$('#seekWave'),skX=skC.getContext('2d'),skRing=$('#ringP'),dock=$('#playerDock');let skW=0,skH=0,skAmp=.22,skDrag=false;
+function sizeSeek(){const D=Math.min(devicePixelRatio||1,1.75);skW=skC.clientWidth;skH=skC.clientHeight;skC.width=skW*D;skC.height=skH*D;skX.setTransform(D,0,0,D,0,0)}
+$('#seek').addEventListener('pointerdown',()=>{skDrag=true;dock.classList.add('seeking')});
+addEventListener('pointerup',()=>{skDrag=false;dock.classList.remove('seeking')});addEventListener('pointercancel',()=>{skDrag=false;dock.classList.remove('seeking')});
+function drawSeek(now,dt){
+const dur=audio.duration,p=dur>0?clamp(audio.currentTime/dur,0,1):0,playing=!audio.paused&&!audio.ended,t=RM?0:now;
+skRing.style.strokeDashoffset=(100*(1-p)).toFixed(2);
+skAmp+=((playing?1:.22)+(skDrag?.8:0)-skAmp)*Math.min(1,dt/420);
+skX.clearRect(0,0,skW,skH);const mid=skH/2,n=Math.round(skW/4),A=skH*.34*skAmp;
+for(let k=0;k<3;k++){const P=new Path2D();
+for(let i=0;i<=n;i++){const u=i/n,sw2=.25+1.35*Math.exp(-(((u-p)/.11)**2)),y=mid+k*2.5+A*sw2*(Math.sin(u*34+t*.002-k*.5)*.6+Math.sin(u*13-t*.0013)*.4)*Math.sqrt(Math.sin(Math.PI*u));i?P.lineTo(u*skW,y):P.moveTo(u*skW,y)}
+skX.globalAlpha=[1,.3,.13][k];skX.lineWidth=1.3;
+skX.save();skX.beginPath();skX.rect(0,0,p*skW,skH);skX.clip();skX.strokeStyle='#ecdcbc';skX.stroke(P);skX.restore();
+skX.save();skX.beginPath();skX.rect(p*skW,0,skW,skH);skX.clip();skX.strokeStyle='rgba(188,212,242,.5)';skX.stroke(P);skX.restore()}
+skX.fillStyle='#ecdcbc';if(skDrag){skX.globalAlpha=.22;skX.beginPath();skX.arc(p*skW,mid,14,0,6.283);skX.fill()}
+skX.globalAlpha=1;skX.beginPath();skX.arc(p*skW,mid,skDrag?6.5:3.8,0,6.283);skX.fill()}
+addEventListener('resize',()=>{layout();sizeSeek()});layout();sizeSeek();updatePlayButton();requestAnimationFrame(loop);
+requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.add('on')));
+})();
+</script>
+</body>
+</html>

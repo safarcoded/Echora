@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#04060c">
+<title>ECHORA · Lyric Sync Studio</title>
+<style>
+:root{color-scheme:dark;--bg:#04060c;--panel:#0a1020;--panel2:#0d1629;--ice:#bcd4f2;--ch:#ecdcbc;--text:#eef3fb;--muted:#8996ad;--line:rgba(188,212,242,.14);--serif:Georgia,"Times New Roman",serif}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 20% 0%,#111c35 0,transparent 45%),radial-gradient(ellipse at 90% 60%,#17112b 0,transparent 35%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+header{max-width:1200px;margin:auto;padding:26px 22px 18px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line)}
+.brand{letter-spacing:.22em;font-size:12px;color:var(--ice)}header small{color:var(--muted)}main{max-width:1200px;margin:auto;padding:22px;display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,.9fr);gap:20px}
+.card{background:linear-gradient(145deg,rgba(13,22,41,.92),rgba(6,10,20,.94));border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 20px 70px #0003}
+h1{font:400 clamp(28px,4vw,42px)/1.08 var(--serif);margin:8px 0 10px;letter-spacing:-.03em}h2{font:400 22px var(--serif);margin:0 0 12px}.sub{color:var(--muted);font-size:13px;margin:0 0 18px}
+label{display:block;color:var(--ice);font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin:12px 0 7px}
+input[type=file],textarea,button{font:inherit}input[type=file],textarea{width:100%;border:1px solid var(--line);border-radius:12px;background:#050914;color:var(--text);padding:12px}
+textarea{min-height:240px;resize:vertical;line-height:1.6}button{border:1px solid var(--line);border-radius:999px;padding:10px 15px;background:#101a2c;color:var(--text);cursor:pointer;transition:.2s}button:hover{border-color:#bcd4f280;background:#17243a}button.primary{background:var(--ice);color:#08101d;border-color:transparent;font-weight:650}button:disabled{opacity:.35;cursor:not-allowed}
+.row{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.time{font-variant-numeric:tabular-nums;font-size:clamp(25px,4vw,36px);letter-spacing:.04em;color:var(--ice);margin:12px 0}.nowline{padding:16px;border-radius:14px;background:linear-gradient(120deg,#bcd4f212,#ecdcbc08);border:1px solid var(--line);font:22px/1.4 var(--serif);min-height:76px}
+input[type=range]{width:100%;accent-color:var(--ice);margin:10px 0}.hint{font-size:12px;color:var(--muted)}.status{color:var(--ch);font-size:13px;min-height:20px;margin-top:10px}
+.list{display:flex;flex-direction:column;gap:7px;max-height:520px;overflow:auto;margin-top:12px}.lyric{display:grid;grid-template-columns:56px 1fr auto;gap:10px;align-items:center;text-align:left;border-radius:12px;padding:10px 12px;width:100%;border-color:transparent;background:#ffffff04}.lyric.active{background:#bcd4f217;border-color:#bcd4f24d}.stamp{font-variant-numeric:tabular-nums;color:var(--ice);font-size:12px}.lyric-text{white-space:normal}.tag{font-size:10px;letter-spacing:.08em;color:var(--muted)}.empty{padding:18px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:13px}
+footer{max-width:1200px;margin:0 auto;padding:0 22px 28px;color:var(--muted);font-size:12px}
+@media(max-width:800px){main{grid-template-columns:1fr;padding:14px}header{padding:20px 16px}.card{padding:16px}footer{padding:0 16px 24px}.list{max-height:400px}}
+</style>
+</head>
+<body>
+<header><div><div class="brand">E C H O R A</div><small>LYRIC SYNC STUDIO · LOCAL TOOL</small></div><small>Midnight blue · Ice blue · Champagne</small></header>
+<main>
+<section class="card">
+  <div class="brand">01 / SETUP</div><h1>Make every line<br>meet its moment.</h1>
+  <p class="sub">Load your audio, paste the lyrics one line per row, then mark each line as it begins. The timestamps are captured from the audio player.</p>
+  <label for="audioFile">Audio file</label><input id="audioFile" type="file" accept="audio/*">
+  <div class="hint" id="fileHint">Choose the audio file from your device. It stays in this browser tab; nothing is uploaded.</div>
+  <label for="lyricsInput">Lyrics · one line per row</label><textarea id="lyricsInput" placeholder="Paste the lyrics you have, with each lyric line on a separate row."></textarea>
+  <div class="row" style="margin-top:10px"><button id="loadLyrics" class="primary">Load lyric lines</button><button id="clearLyrics">Clear</button></div>
+  <div class="status" id="setupStatus" role="status"></div>
+</section>
+<section class="card">
+  <div class="brand">02 / TIMING</div><h2>Recording desk</h2><p class="sub">Play the song and press <b>Mark current line</b> when the highlighted lyric begins. You can undo or adjust timestamps later.</p>
+  <audio id="audio" controls preload="metadata" style="width:100%"></audio>
+  <div class="time" id="clock">00:00.000</div>
+  <input id="seek" type="range" min="0" max="1000" value="0" aria-label="Seek audio">
+  <div class="nowline" id="currentLine">Load your lyrics to begin.</div>
+  <div class="row" style="margin-top:14px">
+    <button id="prev">← Previous</button><button id="mark" class="primary" disabled>Mark current line · Enter</button><button id="next">Next →</button>
+  </div>
+  <div class="row" style="margin-top:10px">
+    <button id="undo">Undo last mark</button><button id="minus">−0.10s</button><button id="plus">+0.10s</button><button id="export" class="primary" disabled>Export JSON</button>
+  </div>
+  <p class="hint" style="margin-top:12px">Shortcuts: Space = play/pause · Enter = mark line · Backspace = undo. Shortcuts are disabled while typing.</p>
+  <div class="status" id="timingStatus" role="status"></div>
+</section>
+<section class="card" style="grid-column:1/-1">
+  <div class="row" style="justify-content:space-between"><div><div class="brand">03 / LYRIC MAP</div><h2 style="margin-top:7px">Timestamped lines</h2></div><span class="tag" id="count">0 LINES</span></div>
+  <p class="sub">Tap a row to seek to its timestamp. Use the adjustment buttons to fine-tune the selected row after marking.</p>
+  <div id="list" class="list"><div class="empty">Your lyric lines will appear here after you load them.</div></div>
+</section>
+</main>
+<footer>ECHORA Sync Studio is a local helper. Save the exported JSON beside your project and wire it into the lyrics page. For best results, mark the start of each line while listening with headphones.</footer>
+<script>
+(() => {
+ const $=id=>document.getElementById(id);
+ const audio=$('audio'), fileInput=$('audioFile'), lyricsInput=$('lyricsInput');
+ let lines=[], index=0, objectUrl=null;
+ const fmt=t=>{if(!Number.isFinite(t)||t<0)t=0;const m=Math.floor(t/60),s=Math.floor(t%60),ms=Math.floor((t%1)*1000);return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')+'.'+String(ms).padStart(3,'0')};
+ const status=(id,msg)=>$(id).textContent=msg;
+ function render(){
+  $('count').textContent=lines.length+' LINE'+(lines.length===1?'':'S');
+  $('mark').disabled=!lines.length;
+  $('export').disabled=!lines.length||!lines.some(x=>x.time!==null);
+  $('currentLine').textContent=lines[index]?.text||'Load your lyrics to begin.';
+  if(!lines.length){$('list').innerHTML='<div class="empty">Your lyric lines will appear here after you load them.</div>';return}
+  $('list').innerHTML=lines.map((l,i)=>`<button class="lyric ${i===index?'active':''}" data-i="${i}"><span class="stamp">${l.time===null?'—:—.———':fmt(l.time)}</span><span class="lyric-text">${escapeHtml(l.text)}</span><span class="tag">${i===index?'SELECTED':l.time===null?'UNMARKED':'MARKED'}</span></button>`).join('');
+  $('list').querySelectorAll('[data-i]').forEach(b=>b.addEventListener('click',()=>select(Number(b.dataset.i),true)));
+ }
+ function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+ function select(i,seek){if(!lines.length)return;index=Math.max(0,Math.min(lines.length-1,i));if(seek&&lines[index].time!==null&&audio.src)audio.currentTime=lines[index].time;render()}
+ fileInput.addEventListener('change',()=>{
+  const f=fileInput.files?.[0];if(!f)return;
+  if(objectUrl)URL.revokeObjectURL(objectUrl);objectUrl=URL.createObjectURL(f);audio.src=objectUrl;audio.load();
+  $('fileHint').textContent=f.name+' · '+(f.size/1024/1024).toFixed(1)+' MB';
+  status('setupStatus','Audio ready. Paste/load your lyric lines, then mark timestamps.');
+ });
+ $('loadLyrics').addEventListener('click',()=>{
+  const text=lyricsInput.value.trim();if(!text){status('setupStatus','Paste the lyrics first.');return}
+  lines=text.split(/\r?\n/).map(s=>s.trim()).filter(Boolean).map(text=>({text,time:null}));
+  index=0;render();status('setupStatus',lines.length+' lines loaded. Press play, then mark each line as it begins.');
+ });
+ $('clearLyrics').addEventListener('click',()=>{lyricsInput.value='';lines=[];index=0;render();status('setupStatus','Lyrics cleared.')});
+ $('mark').addEventListener('click',()=>{
+  if(!lines.length)return;
+  lines[index].time=audio.currentTime;
+  status('timingStatus','Marked line '+(index+1)+' at '+fmt(audio.currentTime)+'.');
+  if(index<lines.length-1)index++;
+  render();
+ });
+ $('prev').addEventListener('click',()=>select(index-1,true));
+ $('next').addEventListener('click',()=>select(index+1,true));
+ $('undo').addEventListener('click',()=>{
+  if(!lines.length)return;
+  let target=index;
+  if(lines[target].time===null&&target>0)target--;
+  if(lines[target]){lines[target].time=null;index=target;status('timingStatus','Removed timestamp for line '+(target+1)+'.');render()}
+ });
+ function adjust(delta){if(!lines[index]||lines[index].time===null){status('timingStatus','Mark this line first, then adjust it.');return}lines[index].time=Math.max(0,lines[index].time+delta);if(audio.src)audio.currentTime=lines[index].time;render();status('timingStatus','Adjusted selected line to '+fmt(lines[index].time)+'.')}
+ $('minus').addEventListener('click',()=>adjust(-.1));$('plus').addEventListener('click',()=>adjust(.1));
+ $('seek').addEventListener('input',()=>{if(Number.isFinite(audio.duration)&&audio.duration>0)audio.currentTime=(Number($('seek').value)/1000)*audio.duration});
+ audio.addEventListener('timeupdate',()=>{
+  $('clock').textContent=fmt(audio.currentTime);
+  if(Number.isFinite(audio.duration)&&audio.duration>0)$('seek').value=String(Math.round(audio.currentTime/audio.duration*1000));
+ });
+ $('export').addEventListener('click',()=>{
+  if(!lines.length)return;
+  const out=lines.map((l,i)=>({time:l.time,text:l.text,order:i+1}));
+  const blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='earrings-lyrics-timestamps.json';a.click();URL.revokeObjectURL(url);
+  status('timingStatus','Exported JSON. Unmarked lines are null; mark or adjust them before using the file.');
+ });
+ document.addEventListener('keydown',e=>{
+  const tag=document.activeElement?.tagName;
+  if(tag==='TEXTAREA'||tag==='INPUT')return;
+  if(e.code==='Space'){e.preventDefault();if(audio.paused)audio.play();else audio.pause()}
+  if(e.code==='Enter'&&!$('mark').disabled){e.preventDefault();$('mark').click()}
+  if(e.code==='Backspace'){e.preventDefault();$('undo').click()}
+ });
+ render();
+})();
+</script>
+</body>
+</html>
